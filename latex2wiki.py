@@ -92,7 +92,9 @@ tr_list2 = [
 	(r"\\small", None, dummy),
 	(r"\\index{(.*?)}", None, dummy), #todo
 	(r"\\ldots", (lambda : "..."), dummy),
+	(r"(?i)\\Pagebreak", (lambda : r""), dummy), #pagebreak
 	(r"\-{3}", (lambda : "—"), dummy),
+	(r"{\\em (.*?)}", (lambda : r"''\1''"), dummy), #cursivas
 	(r"(?im)^\\pro ", (lambda : "#"), dummy), #lista ordenada
 	(r"(?im)^\\spro ", (lambda : "*"), dummy), #lista sin orden
 	(r"\\ldots", (lambda : "..."), dummy),
@@ -140,6 +142,8 @@ out_stream = sys.stdout
 #for i in in_stream.readlines():
 salida=''
 salida=f.read()
+salida=re.sub(r'([^\n])\n([^\n])', r'\1 \2', salida) #metemos espacios al concatenar lineas consecutivas
+#salida=re.sub(r'\n\n\n+', r'\n\n', salida) #quitamos saltos excesivos
 
 for reg, sub, fun in tr_list2:
 	p = re.compile(reg)
@@ -154,8 +158,6 @@ f.close()
 f=open('salida.wiki', 'w')
 if re.search(r'<ref[> ]', salida):
 	salida+='\n\n== Referencias ==\n<references />'
-salida=re.sub(r'([^\n])\n([^\n])', r'\1 \2', salida) #metemos espacios al concatenar lineas consecutivas
-salida=re.sub(r'\n\n\n+', r'\n\n', salida) #quitamos saltos excesivos
 salida=re.sub(r'\n\n+([\*\#])', r'\n\1', salida) #quitamos saltos en listas
 f.write(salida)
 f.close()
