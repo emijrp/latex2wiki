@@ -86,7 +86,7 @@ NONE = "__@NONE@__"
 tr_list2 = [
 	#(r">", (lambda: translate_to_html('>')), dummy),
 	#(r"<", (lambda: translate_to_html('<')), dummy),
-	(r"(?im)\$\$?(.*?)\$?\$", (lambda: r'<math>\1</math>'), dummy),
+	(r"(?im)\$\$?([^$]*?)\$?\$", (lambda: r'<math>\1</math>'), dummy),
 	(r"\\footnotesize", None, dummy),
 	(r"\\footnote{(.*?)}", (lambda :r"<ref>\1</ref>"), dummy),
 	(r"\\small", None, dummy),
