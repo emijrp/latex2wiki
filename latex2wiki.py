@@ -86,9 +86,16 @@ NONE = "__@NONE@__"
 tr_list2 = [
 	#(r">", (lambda: translate_to_html('>')), dummy),
 	#(r"<", (lambda: translate_to_html('<')), dummy),
-	(r"\$\$?(.*?)\$?\$", (lambda: r'<math>\1</math>'), dummy),
+	(r"(?im)\$\$?(.*?)\$?\$", (lambda: r'<math>\1</math>'), dummy),
 	(r"\\footnotesize", None, dummy),
+	(r"\\footnote{(.*?)}", (lambda :r"<ref>\1</ref>"), dummy),
 	(r"\\small", None, dummy),
+	(r"\\index{(.*?)}", None, dummy), #todo
+	(r"\\ldots", (lambda : "..."), dummy),
+	(r"\-{3}", (lambda : "—"), dummy),
+	(r"(?im)^\\pro ", (lambda : "#"), dummy), #lista ordenada
+	(r"(?im)^\\spro ", (lambda : "*"), dummy), #lista sin orden
+	(r"\\ldots", (lambda : "..."), dummy),
 	(r"\\begin\{document}", None, start_doc),
 	(r"\\\\$", (lambda : "\n\n"), dummy),
 	(r"\\\$", (lambda : "$"), dummy),
@@ -115,21 +122,24 @@ tr_list2 = [
 	(r"\\newpage",None, dummy),
 	(r"\\thispagestyle{.*?}", None, dummy),
 	(r"\\maketitle", None, dummy),
-	(r"\n$", decide_el, dummy),
+	#(r"\n$", decide_el, dummy),
+	#(r"(?im)(\w)[\n\r]+(\w)", (lambda :r'\1 \2'), dummy),
 	#(r"[^\\]?\{", None, dummy),
 	#(r"[^\\]?\}", None, dummy),
-	
+	(r"(?im)^\%.*$\n", None, dummy), #quitamos comentarios
     ]
 
 #in_stream  = sys.stdin;
-f=open(sys.argv[1], 'r')
+if len(sys.argv)==2:
+	f=open(sys.argv[1], 'r')
+else:
+	print 'Introduce un parametro con el nombre del fichero que contienen el codigo fuente en latex'
+	sys.exit()
 out_stream = sys.stdout
 
 #for i in in_stream.readlines():
 salida=''
 salida=f.read()
-salida=re.sub(r'([^\n])\n([^\n])', r'\1\2', salida)
-salida=re.sub(r'\n\n\n+', r'\n\n', salida)
 
 for reg, sub, fun in tr_list2:
 	p = re.compile(reg)
@@ -142,5 +152,10 @@ for reg, sub, fun in tr_list2:
 
 f.close()
 f=open('salida.wiki', 'w')
+if re.search(r'<ref[> ]', salida):
+	salida+='\n\n== Referencias ==\n<references />'
+salida=re.sub(r'([^\n])\n([^\n])', r'\1 \2', salida) #metemos espacios al concatenar lineas consecutivas
+salida=re.sub(r'\n\n\n+', r'\n\n', salida) #quitamos saltos excesivos
+salida=re.sub(r'\n\n+([\*\#])', r'\n\1', salida) #quitamos saltos en listas
 f.write(salida)
 f.close()
