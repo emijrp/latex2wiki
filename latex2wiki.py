@@ -79,67 +79,67 @@ def translate_to_html(char):
 		return char
 
 def header(i):
-	return r"%s \1 %s" % (i*'=', i*'=')
+	return ur"%s \1 %s" % (i*'=', i*'=')
 
 NONE = "__@NONE@__"
 
 tr_list2 = [
-	#(r">", (lambda: translate_to_html('>')), dummy),
-	#(r"<", (lambda: translate_to_html('<')), dummy),
-	(r"(?im)\$\$?([^$]*?)\$?\$", (lambda: r'<math>\1</math>'), dummy),
-	(r"\\footnotesize", None, dummy),
-	(r"\\footnote{(.*?)}", (lambda :r"<ref>\1</ref>"), dummy),
-	(r"\\index{(.*?)}", None, dummy), #todo
-	(r"\\ldots", (lambda : "..."), dummy),
-	(r"(?i)\\Pagebreak", (lambda : r""), dummy), #pagebreak
-	(r"\-{3}", (lambda : "—"), dummy),
-	(r"{\\em (.*?)}", (lambda : r"''\1''"), dummy), #cursivas
-	(r"(?im)^\\pro ", (lambda : "#"), dummy), #lista ordenada
-	(r"(?im)^\\spro ", (lambda : "*"), dummy), #lista sin orden
-	(r"\\ldots", (lambda : "..."), dummy),
-	(r"\\begin\{document}", None, start_doc),
-	(r"\\\\$", (lambda : "\n\n"), dummy),
-	(r"\\\$", (lambda : "$"), dummy),
-	(r"\\emph{(.*?)}", (lambda : r"_\1_"), dummy),
-	(r"(?i)\\textit{(.*?)}", (lambda :r"''\1''"), dummy),
-	(r"(?i)\\texttt{(.*?)}", (lambda : r"<tt>\1</tt>"), dummy),
-	(r"(?i)\\textbf{(.*?)}", (lambda : r"'''\1'''"), dummy),
-	(r"(?i)\\url{(.*?)}", (lambda : r"\1"), dummy),
-	(r"\\begin{verbatim}", (lambda : "<verbatim>"), start_verbatim),
-	(r"\\end{verbatim}", (lambda : "</verbatim>"), end_verbatim),
-	(r"\\begin{itemize}", (lambda : "\n"), inc_bullet),
-	(r"\\end{itemize}", None, dec_bullet),
-	(r"\\item (.*?)", (lambda : r"\n" + (r"   " * bullet_level) + r"* \1"), dummy),
-	(r"\\item\[(.*?)\]", (lambda : r":\1"), dummy),
-	(r"\\begin{.*?}", None, dummy),
-	(r"\\end{.*?}", None, dummy),
-	(r"``(.*?)''", (lambda :r'"\1"'), dummy),
-	(r"(?i)\\subsubsection{(.*?)}", (lambda : header(4)), dummy),
-	(r"(?i)\\subsection{(.*?)}", (lambda : header(3)), dummy),
-	(r"(?i)\\section{(.*?)}", (lambda : header(2)), dummy),
-	(r"(?i)\\chaptere?{(.*?)}", (lambda : header(1)), dummy),
-	(r"(?i)\\index{(.*?)}", None, dummy),
-	(r"\\_", (lambda :"_"), dummy),
-	(r"\\tableofcontents",None, dummy),
-	(r"\\null",None, dummy),
-	(r"\\newpage",None, dummy),
-	(r"\\thispagestyle{.*?}", None, dummy),
-	(r"\\maketitle", None, dummy),
-	(r"\\-", None, dummy),
-	(r"\\clearpage", (lambda : r'<br clear="all" />'), dummy),
-	(r"\\cleardoublepage", (lambda : r'<br clear="all" />'), dummy),
-	(r"\\markboth{}{}", None, dummy), #todo
-	(r"\\addcontentsline.*", None, dummy), #todo
-	#(r"\n$", decide_el, dummy),
-	#(r"(?im)(\w)[\n\r]+(\w)", (lambda :r'\1 \2'), dummy),
-	#(r"[^\\]?\{", None, dummy),
-	#(r"[^\\]?\}", None, dummy),
-	(r"(?im)^\%.*$\n", None, dummy), #quitamos comentarios
-	(r"\\\\", (lambda: r'\n'), dummy), 
-	(r"\\tt ([^\}]*)", (lambda: r'<tt>\1</tt>'), dummy), 
-	(r"\\small ([^\}]*)", (lambda: r'<small>\1</small>'), dummy), 
-	(r"\\centerline{(.*?)}", (lambda: r'<center>\1</center>'), dummy), 
-	(r"\\copyright", (lambda: r'©'), dummy), 
+	#(ur">", (lambda: translate_to_html('>')), dummy),
+	#(ur"<", (lambda: translate_to_html('<')), dummy),
+	(ur"(?im)\$\$?([^$]*?)\$?\$", (lambda: ur'<math>\1</math>'), dummy),
+	(ur"\\footnotesize", None, dummy),
+	(ur"\\footnote{(.*?)}", (lambda :ur"<ref>\1</ref>"), dummy),
+	(ur"\\index{(.*?)}", None, dummy), #todo
+	(ur"\\ldots", (lambda : "..."), dummy),
+	(ur"(?i)\\Pagebreak", (lambda : ur""), dummy), #pagebreak
+	(ur"\-{3}", (lambda : "—"), dummy),
+	(ur"{\\em (.*?)}", (lambda : ur"''\1''"), dummy), #cursivas
+	(ur"(?im)^\\pro ", (lambda : "#"), dummy), #lista ordenada
+	(ur"(?im)^\\spro ", (lambda : "*"), dummy), #lista sin orden
+	(ur"\\ldots", (lambda : "..."), dummy),
+	(ur"\\begin\{document}", None, start_doc),
+	(ur"\\\\$", (lambda : "\n\n"), dummy),
+	(ur"\\\$", (lambda : "$"), dummy),
+	(ur"\\emph{(.*?)}", (lambda : ur"_\1_"), dummy),
+	(ur"(?i)\\textit{(.*?)}", (lambda :ur"''\1''"), dummy),
+	(ur"(?i)\\texttt{(.*?)}", (lambda : ur"<tt>\1</tt>"), dummy),
+	(ur"(?i)\\textbf{(.*?)}", (lambda : ur"'''\1'''"), dummy),
+	(ur"(?i)\\url{(.*?)}", (lambda : ur"\1"), dummy),
+	(ur"\\begin{verbatim}", (lambda : "<verbatim>"), start_verbatim),
+	(ur"\\end{verbatim}", (lambda : "</verbatim>"), end_verbatim),
+	(ur"\\begin{itemize}", (lambda : "\n"), inc_bullet),
+	(ur"\\end{itemize}", None, dec_bullet),
+	(ur"\\item (.*?)", (lambda : ur"\n" + (ur"   " * bullet_level) + ur"* \1"), dummy),
+	(ur"\\item\[(.*?)\][\n ]*", (lambda : ur":\1 "), dummy),
+	(ur"\\begin{.*?}", None, dummy),
+	(ur"\\end{.*?}", None, dummy),
+	(ur"``(.*?)''", (lambda :ur'"\1"'), dummy),
+	(ur"(?i)\\subsubsection{(.*?)}", (lambda : header(4)), dummy),
+	(ur"(?i)\\subsection{(.*?)}", (lambda : header(3)), dummy),
+	(ur"(?i)\\section{(.*?)}", (lambda : header(2)), dummy),
+	(ur"(?i)\\chaptere?{(.*?)}", (lambda : header(1)), dummy),
+	(ur"(?i)\\index{(.*?)}", None, dummy),
+	(ur"\\_", (lambda :"_"), dummy),
+	(ur"\\tableofcontents",None, dummy),
+	(ur"\\null",None, dummy),
+	(ur"\\newpage",None, dummy),
+	(ur"\\thispagestyle{.*?}", None, dummy),
+	(ur"\\maketitle", None, dummy),
+	(ur"\\-", None, dummy),
+	(ur"\\clearpage", (lambda : ur'<br clear="all" />'), dummy),
+	(ur"\\cleardoublepage", (lambda : ur'<br clear="all" />'), dummy),
+	(ur"\\markboth{}{}", None, dummy), #todo
+	(ur"\\addcontentsline.*", None, dummy), #todo
+	#(ur"\n$", decide_el, dummy),
+	#(ur"(?im)(\w)[\n\r]+(\w)", (lambda :ur'\1 \2'), dummy),
+	#(ur"[^\\]?\{", None, dummy),
+	#(ur"[^\\]?\}", None, dummy),
+	(ur"(?im)^\%.*$\n", None, dummy), #quitamos comentarios
+	(ur"\\\\", (lambda: ur'\n'), dummy), 
+	(ur"\\tt ([^\}]*)", (lambda: ur'<tt>\1</tt>'), dummy), 
+	(ur"\\small ([^\}]*)", (lambda: ur'<small>\1</small>'), dummy), 
+	(ur"\\centerline{(.*?)}", (lambda: ur'<center>\1</center>'), dummy), 
+	(ur"\\copyright", (lambda: ur'©'), dummy), 
     ]
 
 #in_stream  = sys.stdin;
@@ -156,25 +156,25 @@ out_stream = sys.stdout
 
 #for i in in_stream.readlines():
 salida=''
-salida=f.read()
+salida=unicode(f.read(), 'utf-8')
 
 
 #INICIO PRE-PROCESADO
 
 #metemos los inputs
-m=re.compile(r'\\input\{(?P<filename>[^\}]*?)\}').finditer(salida)
+m=re.compile(ur'\\input\{(?P<filename>[^\}]*?)\}').finditer(salida)
 for i in m:
 	filename=path+i.group('filename')+'.tex'
 	try:
 		g=open(filename, 'r')
-		salida=re.sub(r'\\input\{%s\}' % i.group('filename'), g.read(), salida)
+		salida=re.sub(ur'\\input\{%s\}' % i.group('filename'), unicode(g.read(), 'utf-8'), salida)
 		g.close()
 	except:
 		print 'Fichero %s no encontrado' % filename
 
-#salida=re.sub(r'([^\n])\n([^\n])', r'\1 \2', salida) #metemos espacios al concatenar lineas consecutivas
-salida=re.sub(r'\n\n\n+', r'\n\n', salida) #quitamos saltos excesivos
-salida=re.sub(r'(?m)^\s*', r'', salida) #quitamos espacios inicio línea
+#salida=re.sub(ur'([^\n])\n([^\n])', ur'\1 \2', salida) #metemos espacios al concatenar lineas consecutivas
+salida=re.sub(ur'\n\n\n+', ur'\n\n', salida) #quitamos saltos excesivos
+salida=re.sub(ur'(?m)^\s*', ur'', salida) #quitamos espacios inicio línea
 
 #FIN PRE-PROCESADO
 
@@ -192,13 +192,13 @@ for reg, sub, fun in tr_list2:
 
 
 #post-procesado
-salida=re.sub(r'\n\n\n+', r'\n\n', salida) #quitamos saltos excesivos
-salida=re.sub(r'\n\n+([\*\#])', r'\n\1', salida) #quitamos saltos en listas
+salida=re.sub(ur'\n\n\n+', ur'\n\n', salida) #quitamos saltos excesivos
+salida=re.sub(ur'\n\n+([\*\#])', ur'\n\1', salida) #quitamos saltos en listas
 
 f.close()
 f=open('salida.wiki', 'w')
-if re.search(r'<ref[> ]', salida):
+if re.search(ur'<ref[> ]', salida):
 	salida+='\n\n== Referencias ==\n<references />'
 
-f.write(salida)
+f.write(salida.encode('utf-8'))
 f.close()
